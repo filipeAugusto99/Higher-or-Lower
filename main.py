@@ -3,45 +3,67 @@ import art
 import game_data
 import random
 
-# print logo
-print(art.logo)
+
+# functions
+def get_options():
+    main_dict = game_data.data
+    option = main_dict[random.randint(0, len(main_dict) - 1)]
+
+    return option
 
 
-main_dict = game_data.data
-
-game_over = False
-
-score = 0
-
-while not game_over:
-    
-    option_A = main_dict[random.randint(1, len(main_dict))]
-    option_B = main_dict[random.randint(1, len(main_dict))]
+def compare_options(option, label):
+    print(f"Compare {label}: {option['name']}, a {option['description']}, from {option['country']}")
 
 
-    print(f"Compare A: {option_A["name"]}, a {option_A["description"]}, from {option_A["country"]}")
+def check_answer(option_A, option_B, user_choice, score):
+    correct_answer = 'a' if option_A['follower_count'] > option_B['follower_count'] else 'b'
 
-    print(art.vs)
+    if user_choice == correct_answer:
+        score += 1
+        return score, False
+    else:
+        return score, True
 
-    print(f"Compare B: {option_B["name"]}, a {option_B["description"]}, from {option_B["country"]}")
 
-    input_A_or_B = input("Who has more followers? Type 'A' or 'B':").lower()
+def play():
+    # print logo
+    print(art.logo)
 
-    if option_A["follower_count"] > option_B["follower_count"]:
-        if input_A_or_B == 'a':
-            score += 1
-        elif input_A_or_B == 'b':
+
+    game_over = False
+    score = 0
+
+
+    # main logic
+    while not game_over:
+        option_A = get_options()
+        option_B = get_options()
+
+        while option_B == option_A:
+            option_B = get_options()
+
+
+        compare_options(option_A, "A")
+
+        print(art.vs)
+
+        compare_options(option_B, "B")
+
+        input_A_or_B = input("Who has more followers? Type 'A' or 'B':").lower()
+
+        score, game_over = check_answer(option_A=option_A, option_B=option_B, user_choice=input_A_or_B, score=score)
+        
+        if game_over:
             print(f"{'\n' * 100}")
             print(f"Sorry, that's wrong. Final score: {score}")
             break
-    elif option_B["follower_count"] > option_A["follower_count"] :
-        if input_A_or_B == 'b':
-            score += 1
-
-        elif input_A_or_B == 'a':
+        else:
             print(f"{'\n' * 100}")
-            print(f"Sorry, that's wrong. Final score: {score}")
-            break
-    
-    print(f"{'\n' * 100}")
-    print(f"You're right! Current score: {score}")
+            print(f"You're right! Current score: {score}")
+
+        print(f"{'\n' * 100}")
+        print(f"You're right! Current score: {score}")
+
+
+play()
