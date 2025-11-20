@@ -6,16 +6,21 @@ import random
 
 # functions
 def get_options():
+    # this variable get the dictionary from game_data
     main_dict = game_data.data
+    # option get one random item from main_dict
     option = main_dict[random.randint(0, len(main_dict) - 1)]
 
+    # return the item randomic from the dict
     return option
 
 
+# this function return a output, showing name, description and country of option avaliable
 def compare_options(option, label):
     print(f"Compare {label}: {option['name']}, a {option['description']}, from {option['country']}")
 
 
+# check the answer of the user
 def check_answer(option_A, option_B, user_choice, score):
     correct_answer = 'a' if option_A['follower_count'] > option_B['follower_count'] else 'b'
 
@@ -26,6 +31,7 @@ def check_answer(option_A, option_B, user_choice, score):
         return score, True
 
 
+# play the game
 def play():
     # print logo
     print(art.logo)
@@ -40,6 +46,7 @@ def play():
         option_A = get_options()
         option_B = get_options()
 
+        # ensures that option A or B don't be equal
         while option_B == option_A:
             option_B = get_options()
 
@@ -61,9 +68,6 @@ def play():
         else:
             print(f"{'\n' * 100}")
             print(f"You're right! Current score: {score}")
-
-        print(f"{'\n' * 100}")
-        print(f"You're right! Current score: {score}")
 
 
 play()
